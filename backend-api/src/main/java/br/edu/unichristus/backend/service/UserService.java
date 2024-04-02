@@ -32,5 +32,14 @@ public class UserService {
 	public void delete(Long id) {
 		repository.deleteById(id);
 	}
+	
+	public User findById(Long id) {
+		var user = repository.findById(id);
+		if(user.isEmpty()) {
+			System.out.println("Usuário n encontrado");
+			return null;
+		}
+		return user.get();
+	}
 
 }
