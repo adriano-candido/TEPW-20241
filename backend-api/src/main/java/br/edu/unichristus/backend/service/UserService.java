@@ -1,12 +1,14 @@
 package br.edu.unichristus.backend.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import br.edu.unichristus.backend.data.User;
+import br.edu.unichristus.backend.exception.CommonsException;
 import br.edu.unichristus.backend.repository.UserRepository;
-
-import java.util.List;
 
 @Service
 public class UserService {
@@ -16,8 +18,11 @@ public class UserService {
 
 	public User save(User user) {
 		if(user.getName().length() > 150) {
-			System.out.println("Limite de caracteres excedido!");
-			return null;
+			throw new CommonsException(
+					HttpStatus.BAD_REQUEST,
+					"unichristus.backend.service.user.badrequest.exception",
+					"Limite de caracteres excedido!"
+					);
 		}
 		
 		var userSaved = repository.save(user);
