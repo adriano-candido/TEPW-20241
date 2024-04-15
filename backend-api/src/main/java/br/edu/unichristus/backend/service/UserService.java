@@ -24,6 +24,15 @@ public class UserService {
 					"Limite de caracteres excedido!"
 					);
 		}
+		var userFind = repository.findByLogin(user.getLogin());
+		if(!userFind.isEmpty()) {
+			throw new CommonsException(
+					HttpStatus.CONFLICT,
+					"unichristus.backend.service.user.conflict.exception",
+					"O Login informado já existe!"
+					);
+		}
+		
 		
 		var userSaved = repository.save(user);
 		
@@ -35,14 +44,18 @@ public class UserService {
 	}
 	
 	public void delete(Long id) {
+		findById(id);
 		repository.deleteById(id);
 	}
 	
 	public User findById(Long id) {
 		var user = repository.findById(id);
 		if(user.isEmpty()) {
-			System.out.println("Usuário n encontrado");
-			return null;
+			throw new CommonsException(
+					HttpStatus.NOT_FOUND,
+					"unichristus.backend.service.user.notfound.exception",
+					"O usuário com a ID informada, não foi encontrado."
+					);
 		}
 		return user.get();
 	}
