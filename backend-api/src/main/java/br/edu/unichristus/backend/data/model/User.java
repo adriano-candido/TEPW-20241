@@ -1,4 +1,4 @@
-package br.edu.unichristus.backend.data;
+package br.edu.unichristus.backend.data.model;
 
 import java.util.Objects;
 
