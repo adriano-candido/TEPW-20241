@@ -19,6 +19,9 @@ import br.edu.unichristus.backend.data.dto.UserDTO;
 import br.edu.unichristus.backend.data.dto.UserLowDTO;
 import br.edu.unichristus.backend.data.model.User;
 import br.edu.unichristus.backend.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -27,6 +30,20 @@ public class UserController {
 	@Autowired
 	private UserService service;
 	
+	@Operation(summary = "Cadastrar usuário | role: [ADMIN]", 
+			tags = "User", description = "Possibilita "
+					+ "cadastrar um usuário a "
+					+ "partir dos dados de entrada")
+	@ApiResponses({
+			@ApiResponse(responseCode = "200", description = 
+					"Usuário retornado com suceso"),
+			@ApiResponse(responseCode = "400", description = 
+			"Limite de caracteres excedido!"),
+			@ApiResponse(responseCode = "409", description = 
+			"O Login informado já existe!"),
+			@ApiResponse(responseCode = "500", description = 
+					"Erro interno no servidor."),
+	})
 	@PostMapping
 	public UserLowDTO save(@RequestBody UserDTO user) {
 		return service.save(user);
