@@ -1,14 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import Propriedade from './Propriedade'
 import PropriedadeNovo from './PropriedadeNovo';
 import Estado from './Estado';
 
 export default function App() {
-let count = 0;
+const [count, setCounter] = useState(0);
 
 function increment(){
-  count++;
+  setCounter(count+1);
 }
 
   return (
