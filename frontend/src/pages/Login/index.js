@@ -15,7 +15,7 @@ export default function Login(){
                     <input type="text" placeholder="Usuário"/>
                     <input type="password" placeholder="Senha"/>
 
-                    <button type="submit">Entrar</button>
+                    <button className="button" type="submit">Entrar</button>
                 </form>
             </section>
             <img src={padLock} alt="Imagem de um Cadeado" />
