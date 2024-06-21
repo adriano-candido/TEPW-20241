@@ -57,7 +57,7 @@ export default function NewUser(){
                     <input placeholder="Usuário"
                     value={login}
                     onChange={e => setLogin(e.target.value)}/>
-                    <input placeholder="Senha"
+                    <input placeholder="Senha" type="password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}/>
 
