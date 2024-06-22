@@ -11,7 +11,7 @@ export default function RoutesApp(){
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/user" element={<User />} />
-                <Route path="/user/new" element={<NewUser />} />
+                <Route path="/user/new/:userId" element={<NewUser />} />
             </Routes>
         </BrowserRouter>
     );

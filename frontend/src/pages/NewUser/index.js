@@ -1,13 +1,14 @@
-import React, {useState} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import './style.css';
 
 import api from '../../services/api';
 
 import logoImage from '../../assets/logo.png';
-import {FiArrowLeft} from 'react-icons/fi';
+import { FiArrowLeft } from 'react-icons/fi';
 
-export default function NewUser(){
+export default function NewUser() {
+    const [id, setId] = useState('');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [login, setLogin] = useState('');
@@ -15,7 +16,28 @@ export default function NewUser(){
 
     const navigate = useNavigate();
 
-    async function createNewUser(e){
+    const { userId } = useParams();
+
+    async function loadUser() {
+        try {
+            const response = await api.get(`v1/user/${userId}`);
+
+            setId(response.data.id);
+            setName(response.data.name);
+            setEmail(response.data.email);
+            setLogin(response.data.login);
+        } catch (error) {
+            alert('Falha ao consultar usuário!');
+            navigate('/user');
+        }
+    }
+
+    useEffect(() => {
+        if (userId === '0') return;
+        else loadUser();
+    }, [userId]);
+
+    async function createOrUpdateUser(e) {
         e.preventDefault();
 
         const data = {
@@ -26,14 +48,17 @@ export default function NewUser(){
         }
 
         try {
-            await api.post('v1/user', data)
+            if (userId === '0') {
+                await api.post('v1/user', data);
+            } else {
+                data.id = id;
+                await api.put('v1/user', data);
+            }
             navigate('/user');
         } catch (error) {
             alert('Erro ao cadastrar o usuário');
         }
-
     }
-
 
     return (
         <div className="new-user-container">
@@ -47,19 +72,19 @@ export default function NewUser(){
                         Home
                     </Link>
                 </section>
-                <form onSubmit={createNewUser}>
+                <form onSubmit={createOrUpdateUser}>
                     <input placeholder="Nome Completo"
-                    value={name}
-                    onChange={e => setName(e.target.value)}/>
+                        value={name}
+                        onChange={e => setName(e.target.value)} />
                     <input placeholder="E-mail"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}/>
+                        value={email}
+                        onChange={e => setEmail(e.target.value)} />
                     <input placeholder="Usuário"
-                    value={login}
-                    onChange={e => setLogin(e.target.value)}/>
+                        value={login}
+                        onChange={e => setLogin(e.target.value)} />
                     <input placeholder="Senha" type="password"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}/>
+                        value={password}
+                        onChange={e => setPassword(e.target.value)} />
 
                     <button className="button" type="submit">Salvar</button>
                 </form>

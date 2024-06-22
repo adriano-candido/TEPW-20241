@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FiPower, FiEdit, FiTrash2 } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import api from '../../services/api';
 
@@ -10,6 +10,17 @@ import './style.css';
 
 export default function User() {
     const [users, setUsers] = useState([]);
+
+    const navigate = useNavigate();
+
+    async function editUser(id){
+        try {
+            navigate(`/user/new/${id}`);
+        } catch (error) {
+            alert('Falha ao editar usuário!');
+        }
+        //setUsers(users.filter(user => user.id !== id));
+    }
 
     useEffect(() => {
         api.get('v1/user/all').then(response => {
@@ -30,7 +41,7 @@ export default function User() {
             <header>
                 <img src={logoImage} alt="Logo Unichristus" />
                 <span>Bem vindo, <strong>Alguem?</strong>!</span>
-                <Link className="button" to="/user/new">Adicionar Usuário</Link>
+                <Link className="button" to="/user/new/0">Adicionar Usuário</Link>
                 <button type="button">
                     <FiPower size={18} color="#251FC5" />
                 </button>
@@ -47,7 +58,7 @@ export default function User() {
                         <strong>Usuário</strong>
                         <p>{user.login}</p>
 
-                        <button>
+                        <button onClick={() => editUser(user.id)}>
                             <FiEdit size={20} color="#251FC5" />
                         </button>
                         <button onClick={() => deleteUser(user.id)}>

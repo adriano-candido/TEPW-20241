@@ -29,7 +29,7 @@ public class UserService {
 					);
 		}
 		var userFind = repository.findByLogin(userModel.getLogin());
-		if(!userFind.isEmpty()) {
+		if(!userFind.isEmpty() && userFind.get().getId() != userDTO.getId()) {
 			throw new CommonsException(
 					HttpStatus.CONFLICT,
 					"unichristus.backend.service.user.conflict.exception",
@@ -57,7 +57,7 @@ public class UserService {
 		repository.deleteById(id);
 	}
 	
-	public User findById(Long id) {
+	public UserDTO findById(Long id) {
 		var user = repository.findById(id);
 		if(user.isEmpty()) {
 			throw new CommonsException(
@@ -66,7 +66,7 @@ public class UserService {
 					"O usuário com a ID informada, não foi encontrado."
 					);
 		}
-		return user.get();
+		return DozerConverter.parseObject(user.get(), UserDTO.class);
 	}
 
 }
